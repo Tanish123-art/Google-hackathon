@@ -36,4 +36,5 @@ const AuthLayout: React.FC<AuthLayoutProps> = ({ children, title, subtitle }) =>
     </div>
   );
 };
+
 export default AuthLayout;

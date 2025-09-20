@@ -7,15 +7,12 @@
   padding: 0.6rem 1rem;
   font-weight: 500;
   box-shadow: 0 16px 48px rgba(0,0,0,0.45);
-  transition: all 0.5s ease-in-out;
-  transform: scale(1);
 }
 .btn-image-flow::before {
   content: '';
   position: absolute; inset: 0;
   background: var(--flow-gradient, linear-gradient(135deg, rgba(251,146,60,0.9), rgba(236,72,153,0.9)));
   z-index: 0;
-  transition: all 0.5s ease-in-out;
 }
 .btn-image-flow::after {
   content: '';
@@ -23,7 +20,6 @@
   background: linear-gradient(180deg, rgba(255,255,255,0.18), rgba(255,255,255,0.02));
   mix-blend-mode: soft-light;
   z-index: 1;
-  transition: all 0.5s ease-in-out;
 }
 .btn-image-flow > span { position: relative; z-index: 2; }
 .btn-image-flow:hover { filter: brightness(1.03); }

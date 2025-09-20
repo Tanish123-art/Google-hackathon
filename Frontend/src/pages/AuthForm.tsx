@@ -1,11 +1,9 @@
 import React, { useState } from 'react';
 import { SignInFormData, SignUpFormData } from '../types/auth';
-import '../auth.css';
-
-type AuthMode = 'signin' | 'signup';
+import '../auth/auth.css';
 
 interface AuthFormProps {
-  mode: AuthMode;
+  mode: 'signin' | 'signup';
   onSubmit: (data: SignInFormData | SignUpFormData) => void;
   onSwitchMode: () => void;
   isLoading?: boolean;
@@ -21,7 +19,11 @@ const AuthForm: React.FC<AuthFormProps> = ({
   isLoading = false,
   error 
 }) => {
-  const [formData, setFormData] = useState<SignInFormData & SignUpFormData>({
+  const [signInData, setSignInData] = useState<SignInFormData>({
+    email: '',
+    password: ''
+  });
+  const [signUpData, setSignUpData] = useState<SignUpFormData>({
     fullName: '',
     email: '',
     password: '',
@@ -40,141 +42,123 @@ const AuthForm: React.FC<AuthFormProps> = ({
     return score; // 0..4
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSignInSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (mode === 'signup') {
-      if (!formData.fullName.trim()) {
-        setFormError('Please enter your full name.');
-        return;
-      }
-      if (!emailRegex.test(formData.email)) {
-        setFormError('Please enter a valid email address.');
-        return;
-      }
-      if (getPasswordStrength(formData.password) < 2) {
-        setFormError('Use a stronger password (8+ chars, numbers, capital letters).');
-        return;
-      }
-      if (!formData.agreeToTerms) {
-        setFormError('Please agree to the Terms & Conditions.');
-        return;
-      }
-    } else {
-      if (!emailRegex.test(formData.email)) {
-        setFormError('Please enter a valid email address.');
-        return;
-      }
-      if (formData.password.length < 6) {
-        setFormError('Password must be at least 6 characters.');
-        return;
-      }
+    if (!emailRegex.test(signInData.email)) {
+      setFormError('Please enter a valid email address.');
+      return;
+    }
+    if (signInData.password.length < 6) {
+      setFormError('Password must be at least 6 characters.');
+      return;
     }
 
     setFormError(null);
-    
-    if (mode === 'signin' && remember) {
-      localStorage.setItem('last_signin_email', formData.email);
-    } else if (mode === 'signin') {
+    if (remember) {
+      localStorage.setItem('last_signin_email', signInData.email);
+    } else {
       localStorage.removeItem('last_signin_email');
     }
-    
-    onSubmit(formData);
+    onSubmit(signInData);
   };
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleSignUpSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+
+    if (!signUpData.fullName.trim()) {
+      setFormError('Please enter your full name.');
+      return;
+    }
+    if (!emailRegex.test(signUpData.email)) {
+      setFormError('Please enter a valid email address.');
+      return;
+    }
+    if (getPasswordStrength(signUpData.password) < 2) {
+      setFormError('Use a stronger password (8+ chars, numbers, capital letters).');
+      return;
+    }
+    if (!signUpData.agreeToTerms) {
+      setFormError('Please agree to the Terms & Conditions.');
+      return;
+    }
+
+    setFormError(null);
+    onSubmit(signUpData);
+  };
+
+  const handleSignInChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setSignInData(prev => ({
+      ...prev,
+      [e.target.name]: e.target.value
+    }));
+  };
+
+  const handleSignUpChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, type, checked, value } = e.target;
-    setFormData(prev => ({
+    setSignUpData(prev => ({
       ...prev,
       [name]: type === 'checkbox' ? checked : value
     }));
   };
 
-  const strength = getPasswordStrength(formData.password);
-  const isSignUp = mode === 'signup';
+  const strength = getPasswordStrength(signUpData.password);
 
   return (
     <div className="auth-form">
       <div className="auth-card">
         <h2 className="auth-title">
-          {isSignUp ? 'Create Account' : 'Sign In'}
+          {mode === 'signin' ? 'Sign In' : 'Create Account'}
         </h2>
         
-        {!isSignUp && (
+        {mode === 'signin' && (
           <div className="text-xs mb-3 text-gray-600 dark:text-gray-300">
             Demo account: <code>demo@counselling.app</code> / <code>Demo@123</code>
           </div>
         )}
 
-        {/* Google button is rendered in the page above this form */}
-        {/* Divider moved to page to separate Google button and the form */}
-        
         {(error || formError) && (
           <div className="auth-error">
             <p>{formError ?? error}</p>
           </div>
         )}
         
-        <form onSubmit={handleSubmit} noValidate>
-          {isSignUp && (
+        {mode === 'signin' ? (
+          <form onSubmit={handleSignInSubmit} noValidate>
             <div className="auth-form-group">
               <input
-                type="text"
-                name="fullName"
-                placeholder="Full Name"
-                value={formData.fullName}
-                onChange={handleChange}
+                type="email"
+                name="email"
+                placeholder="Email Address"
+                value={signInData.email}
+                onChange={handleSignInChange}
                 required
                 className="auth-input"
-                autoComplete="name"
+                autoComplete="email"
               />
             </div>
-          )}
-          
-          <div className="auth-form-group">
-            <input
-              type="email"
-              name="email"
-              placeholder="Email Address"
-              value={formData.email}
-              onChange={handleChange}
-              required
-              className="auth-input"
-              autoComplete="email"
-            />
-          </div>
-          
-          <div className="auth-form-group auth-password-group">
-            <input
-              type={showPassword ? 'text' : 'password'}
-              name="password"
-              placeholder="Password"
-              value={formData.password}
-              onChange={handleChange}
-              required
-              className="auth-input"
-              autoComplete={isSignUp ? "new-password" : "current-password"}
-            />
-            <button
-              type="button"
-              className="auth-toggle-password"
-              onClick={() => setShowPassword(s => !s)}
-              aria-label={showPassword ? 'Hide password' : 'Show password'}
-            >
-              {showPassword ? 'Hide' : 'Show'}
-            </button>
-          </div>
-
-          {isSignUp && formData.password && (
-            <div className={`auth-password-meter strength-${strength}`}>
-              <span />
-              <span />
-              <span />
-              <span />
+            
+            <div className="auth-form-group auth-password-group">
+              <input
+                type={showPassword ? 'text' : 'password'}
+                name="password"
+                placeholder="Password"
+                value={signInData.password}
+                onChange={handleSignInChange}
+                required
+                className="auth-input"
+                autoComplete="current-password"
+              />
+              <button
+                type="button"
+                className="auth-toggle-password"
+                onClick={() => setShowPassword(s => !s)}
+                aria-label={showPassword ? 'Hide password' : 'Show password'}
+              >
+                {showPassword ? 'Hide' : 'Show'}
+              </button>
             </div>
-          )}
-          
-          {!isSignUp && (
+            
             <div className="auth-row-between">
               <label className="auth-remember">
                 <input
@@ -191,16 +175,82 @@ const AuthForm: React.FC<AuthFormProps> = ({
                 Forgot Password?
               </button>
             </div>
-          )}
-          
-          {isSignUp && (
+            
+            <div className="auth-form-group">
+              <button
+                type="submit"
+                disabled={isLoading}
+                className="auth-submit-btn auth-submit-btn-full"
+              >
+                {isLoading ? 'Signing In...' : 'Sign In'}
+              </button>
+            </div>
+          </form>
+        ) : (
+          <form onSubmit={handleSignUpSubmit} noValidate>
+            <div className="auth-form-group">
+              <input
+                type="text"
+                name="fullName"
+                placeholder="Full Name"
+                value={signUpData.fullName}
+                onChange={handleSignUpChange}
+                required
+                className="auth-input"
+                autoComplete="name"
+              />
+            </div>
+            
+            <div className="auth-form-group">
+              <input
+                type="email"
+                name="email"
+                placeholder="Email Address"
+                value={signUpData.email}
+                onChange={handleSignUpChange}
+                required
+                className="auth-input"
+                autoComplete="email"
+              />
+            </div>
+            
+            <div className="auth-form-group auth-password-group">
+              <input
+                type={showPassword ? 'text' : 'password'}
+                name="password"
+                placeholder="Password"
+                value={signUpData.password}
+                onChange={handleSignUpChange}
+                required
+                className="auth-input"
+                autoComplete="new-password"
+              />
+              <button
+                type="button"
+                className="auth-toggle-password"
+                onClick={() => setShowPassword(s => !s)}
+                aria-label={showPassword ? 'Hide password' : 'Show password'}
+              >
+                {showPassword ? 'Hide' : 'Show'}
+              </button>
+            </div>
+
+            {signUpData.password && (
+              <div className={`auth-password-meter strength-${strength}`}>
+                <span />
+                <span />
+                <span />
+                <span />
+              </div>
+            )}
+            
             <div className="auth-checkbox-group">
               <input
                 type="checkbox"
                 id="agreeToTerms"
                 name="agreeToTerms"
-                checked={formData.agreeToTerms}
-                onChange={handleChange}
+                checked={signUpData.agreeToTerms}
+                onChange={handleSignUpChange}
                 className="auth-checkbox"
               />
               <label htmlFor="agreeToTerms" className="auth-checkbox-label">
@@ -210,30 +260,27 @@ const AuthForm: React.FC<AuthFormProps> = ({
                 </a>
               </label>
             </div>
-          )}
-          
-          <div className="auth-form-group">
-            <button
-              type="submit"
-              disabled={isLoading}
-              className="auth-submit-btn auth-submit-btn-full"
-            >
-              {isLoading 
-                ? (isSignUp ? 'Creating Account...' : 'Signing In...') 
-                : (isSignUp ? 'Create Account' : 'Sign In')
-              }
-            </button>
-          </div>
-        </form>
+            
+            <div className="auth-form-group">
+              <button
+                type="submit"
+                disabled={isLoading}
+                className="auth-submit-btn auth-submit-btn-full"
+              >
+                {isLoading ? 'Creating Account...' : 'Create Account'}
+              </button>
+            </div>
+          </form>
+        )}
         
         <div className="auth-switch">
           <p>
-            {isSignUp ? "Already have an account?" : "Don't have an account?"}{' '}
+            {mode === 'signin' ? "Don't have an account? " : "Already have an account? "}
             <button
               onClick={onSwitchMode}
               className="auth-switch-btn"
             >
-              {isSignUp ? 'Sign In' : 'Sign Up'}
+              {mode === 'signin' ? 'Sign Up' : 'Sign In'}
             </button>
           </p>
         </div>
