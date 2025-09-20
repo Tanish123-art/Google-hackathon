@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
-import Navbar from './components/Navbar';
+import Navbar from '../components/Navbar';
 import { Search, Lightbulb, TrendingUp, GraduationCap, Briefcase, FlaskConical, Brain, Rocket, Users, Code, BarChart, Settings, Plus } from 'lucide-react';
 
-const CareerExploration = () => {
+const CareerExplorationPage = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [interestInput, setInterestInput] = useState('');
   const [selectedRole1, setSelectedRole1] = useState('Select Aunis');
@@ -94,7 +94,7 @@ const CareerExploration = () => {
   };
 
   return (
-    <div className="min-h-screen bg-[#1a2035] font-sans text-white">
+    <div className="min-h-screen bg-gray-50 dark:bg-[#000000] font-sans text-gray-900 dark:text-white transition-colors duration-200">
       <Navbar />
       <div className="px-8 py-8">
         {/* Search and Filter Section */}
@@ -106,43 +106,43 @@ const CareerExploration = () => {
               placeholder="Search for jobs, companies..."
               value={searchTerm}
               onChange={handleSearch}
-              className="w-full pl-10 pr-4 py-2 rounded-lg bg-gray-800 border border-gray-700 focus:outline-none focus:ring-2 focus:ring-orange-500"
+              className="w-full pl-10 pr-4 py-2 rounded-lg bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 focus:outline-none focus:ring-2 focus:ring-orange-500 text-gray-900 dark:text-white transition-colors duration-200"
             />
           </div>
           <div className="flex flex-wrap gap-3">
             <button
               onClick={() => handleFilterClick('Role')}
-              className="px-4 py-2 bg-gray-800 border border-gray-700 rounded-lg hover:bg-gray-700 transition-colors duration-200 text-sm"
+              className="px-4 py-2 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors duration-200 text-sm text-gray-900 dark:text-white"
             >
               Filter by Role
             </button>
             <button
               onClick={() => handleFilterClick('Location')}
-              className="px-4 py-2 bg-gray-800 border border-gray-700 rounded-lg hover:bg-gray-700 transition-colors duration-200 text-sm"
+              className="px-4 py-2 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors duration-200 text-sm text-gray-900 dark:text-white"
             >
               Filter by Location
             </button>
             <button
               onClick={() => handleFilterClick('Experience Level')}
-              className="px-4 py-2 bg-gray-800 border border-gray-700 rounded-lg hover:bg-gray-700 transition-colors duration-200 text-sm"
+              className="px-4 py-2 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors duration-200 text-sm text-gray-900 dark:text-white"
             >
               Experience Level
             </button>
             <button
               onClick={() => handleFilterClick('Experience Level')}
-              className="px-4 py-2 bg-gray-800 border border-gray-700 rounded-lg hover:bg-gray-700 transition-colors duration-200 text-sm"
+              className="px-4 py-2 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors duration-200 text-sm text-gray-900 dark:text-white"
             >
               Experience Level
             </button>
           </div>
         </div>
 
-        <h1 className="text-3xl sm:text-4xl font-bold mb-8">Career Exploration</h1>
+        <h1 className="text-3xl sm:text-4xl font-bold mb-8 text-gradient">Career Exploration</h1>
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           {/* Interactive Career Map */}
-          <div className="lg:col-span-1 p-6 bg-gray-800 rounded-lg shadow-md relative">
-            <h2 className="text-2xl font-semibold mb-4">Interactive Career Map</h2>
+          <div className="lg:col-span-1 p-6 glass-card glow-sm relative animate-fade-in">
+            <h2 className="text-2xl font-semibold mb-4 text-gray-900 dark:text-white">Interactive Career Map</h2>
             <img
               src="https://images.pexels.com/photos/3861958/pexels-photo-3861958.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2"
               alt="Career Map Placeholder"
@@ -150,70 +150,71 @@ const CareerExploration = () => {
             />
             <button
               onClick={handleMapPlusClick}
-              className="absolute top-6 right-6 p-2 bg-gray-700 rounded-full hover:bg-gray-600 transition-colors duration-200"
+              className="absolute top-6 right-6 p-2 bg-orange-100 dark:bg-gray-700 rounded-full hover:bg-orange-200 dark:hover:bg-gray-600 transition-colors duration-200"
             >
-              <Plus size={20} className="text-white" />
+              <Plus size={20} className="text-orange-600 dark:text-white" />
             </button>
           </div>
 
           {/* AI-Powered Discovery */}
-          <div className="lg:col-span-1 p-6 bg-gray-800 rounded-lg shadow-md">
-            <h2 className="text-2xl font-semibold mb-4">AI-Powered Discovery</h2>
+          <div className="lg:col-span-1 p-6 glass-card glow-sm animate-fade-in">
+            <h2 className="text-2xl font-semibold mb-4 text-gray-900 dark:text-white">AI-Powered Discovery</h2>
             <div className="relative mb-6">
               <input
                 type="text"
                 placeholder="Describe your interests..."
                 value={interestInput}
                 onChange={handleInterestInputChange}
-                className="w-full pl-4 pr-10 py-2 rounded-lg bg-gray-700 border border-gray-600 focus:outline-none focus:ring-2 focus:ring-orange-500"
+                className="w-full pl-4 pr-10 py-2 rounded-lg bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 focus:outline-none focus:ring-2 focus:ring-orange-500 text-gray-900 dark:text-white transition-colors duration-200"
               />
               <Lightbulb size={20} className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400" />
             </div>
             <div className="grid grid-cols-2 gap-4">
               {aiRecommendedRoles.map((role) => (
-                <div key={role.id} className="bg-gray-700 p-4 rounded-lg flex flex-col items-start">
+                <div key={role.id} className="bg-orange-50 dark:bg-gray-700 p-4 rounded-lg flex flex-col items-start transition-colors duration-200">
                   <div className="flex items-center mb-2">
                     {role.icon}
-                    <span className="ml-2 text-sm font-medium">{role.title}</span>
+                    <span className="ml-2 text-sm font-medium text-gray-900 dark:text-white">{role.title}</span>
                   </div>
-                  <p className="text-gray-400 text-xs">Recommended</p>
-                  <p className="text-gray-300 text-xs">{role.recommended}</p>
+                  <p className="text-gray-600 dark:text-gray-400 text-xs">Recommended</p>
+                  <p className="text-gray-700 dark:text-gray-300 text-xs">{role.recommended}</p>
                 </div>
               ))}
             </div>
           </div>
 
           {/* Career Comparison Tool */}
-          <div className="lg:col-span-1 p-6 bg-gray-800 rounded-lg shadow-md">
-            <h2 className="text-2xl font-semibold mb-4">Career Comparison Tool</h2>
+          <div className="lg:col-span-1 p-6 glass-card glow-sm animate-fade-in">
+            <h2 className="text-2xl font-semibold mb-4 text-gray-900 dark:text-white">Career Comparison Tool</h2>
             <div className="mb-4">
-              <label htmlFor="role1" className="block text-gray-300 text-sm mb-2">Select Role:</label>
+              <label htmlFor="role1" className="block text-gray-700 dark:text-gray-300 text-sm mb-2">Select Role:</label>
               <div className="flex items-center gap-2">
                 <select
                   id="role1"
                   value={selectedRole1}
                   onChange={(e) => setSelectedRole1(e.target.value)}
-                  className="flex-grow px-4 py-2 rounded-lg bg-gray-700 border border-gray-600 focus:outline-none focus:ring-2 focus:ring-orange-500 text-gray-300"
+                  className="flex-grow px-4 py-2 rounded-lg bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 focus:outline-none focus:ring-2 focus:ring-orange-500 text-gray-900 dark:text-gray-300 transition-colors duration-200"
                 >
                   <option>Select Aunis</option>
                   <option>Data Scientist</option>
                   <option>Software Engineer</option>
                 </select>
-                <button
-                  onClick={handleExplorePaths}
-                  className="px-4 py-2 bg-orange-600 rounded-lg hover:bg-orange-700 transition-colors duration-200 font-medium text-sm"
-                >
-                  Explore Paths
-                </button>
+            <button
+              onClick={handleExplorePaths}
+              className="btn-image-flow"
+              style={{ ['--flow-gradient']: `linear-gradient(135deg, rgba(251,146,60,0.95), rgba(236,72,153,0.95))` }}
+            >
+              <span>Explore Paths</span>
+            </button>
               </div>
             </div>
             <div className="mb-6">
-              <label htmlFor="role2" className="block text-gray-300 text-sm mb-2">Select Role:</label>
+              <label htmlFor="role2" className="block text-gray-700 dark:text-gray-300 text-sm mb-2">Select Role:</label>
               <select
                 id="role2"
                 value={selectedRole2}
                 onChange={(e) => setSelectedRole2(e.target.value)}
-                className="w-full px-4 py-2 rounded-lg bg-gray-700 border border-gray-600 focus:outline-none focus:ring-2 focus:ring-orange-500 text-gray-300"
+                className="w-full px-4 py-2 rounded-lg bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 focus:outline-none focus:ring-2 focus:ring-orange-500 text-gray-900 dark:text-gray-300 transition-colors duration-200"
               >
                 <option>Des Auris</option>
                 <option>Cloud Architect</option>
@@ -222,49 +223,50 @@ const CareerExploration = () => {
             </div>
             <div className="grid grid-cols-2 gap-4 text-sm">
               <div className="flex items-center">
-                <BarChart size={16} className="text-gray-400 mr-2" />
-                <span>Average Salary</span>
+                <BarChart size={16} className="text-gray-500 dark:text-gray-400 mr-2" />
+                <span className="text-gray-700 dark:text-gray-300">Average Salary</span>
               </div>
               <div className="flex items-center">
-                <TrendingUp size={16} className="text-gray-400 mr-2" />
-                <span>Growth Potential</span>
+                <TrendingUp size={16} className="text-gray-500 dark:text-gray-400 mr-2" />
+                <span className="text-gray-700 dark:text-gray-300">Growth Potential</span>
               </div>
               <div className="flex items-center">
-                <GraduationCap size={16} className="text-gray-400 mr-2" />
-                <span>Required Education</span>
+                <GraduationCap size={16} className="text-gray-500 dark:text-gray-400 mr-2" />
+                <span className="text-gray-700 dark:text-gray-300">Required Education</span>
               </div>
               <div className="flex items-center">
-                <Briefcase size={16} className="text-gray-400 mr-2" />
-                <span>Top Skills</span>
+                <Briefcase size={16} className="text-gray-500 dark:text-gray-400 mr-2" />
+                <span className="text-gray-700 dark:text-gray-300">Top Skills</span>
               </div>
             </div>
             <button
               onClick={handleExpandMore}
-              className="mt-6 w-full py-2 bg-orange-600 rounded-lg hover:bg-orange-700 transition-colors duration-200 font-medium"
+              className="mt-6 w-full btn-image-flow"
+              style={{ ['--flow-gradient']: `linear-gradient(135deg, rgba(251,146,60,0.95), rgba(236,72,153,0.95))` }}
             >
-              Expand More
+              <span>Expand More</span>
             </button>
           </div>
         </div>
 
         {/* Detailed Career Cards */}
         <div className="mt-8">
-          <h2 className="text-2xl font-semibold mb-4">Detailed Career Cards</h2>
+          <h2 className="text-2xl font-semibold mb-4 text-gray-900 dark:text-white">Detailed Career Cards</h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
             {detailedCareerCards.map((card) => (
-              <div key={card.id} className="bg-gray-800 p-5 rounded-lg shadow-md flex flex-col justify-between">
+              <div key={card.id} className="glass-card glow-sm p-5 flex flex-col justify-between animate-fade-in">
                 <div>
                   <div className="flex items-center mb-3">
                     <img src={card.logo} alt="Company Logo" className="w-10 h-10 rounded-full object-cover mr-3" />
                     <div>
-                      <h3 className="text-lg font-semibold">{card.title}</h3>
-                      <p className="text-gray-400 text-sm">{card.company}</p>
+                      <h3 className="text-lg font-semibold text-gray-900 dark:text-white">{card.title}</h3>
+                      <p className="text-gray-600 dark:text-gray-400 text-sm">{card.company}</p>
                     </div>
                   </div>
-                  <p className="text-gray-400 text-xs mb-4">{card.description}</p>
+                  <p className="text-gray-600 dark:text-gray-400 text-xs mb-4">{card.description}</p>
                   <div className="flex flex-wrap gap-2 mb-4">
                     {card.skills.map((skill, index) => (
-                      <span key={index} className="bg-gray-700 text-gray-300 text-xs px-2 py-1 rounded-full">
+                      <span key={index} className="bg-orange-100 dark:bg-gray-700 text-orange-800 dark:text-gray-300 text-xs px-2 py-1 rounded-full transition-colors duration-200">
                         {skill}
                       </span>
                     ))}
@@ -273,13 +275,13 @@ const CareerExploration = () => {
                 <div className="flex gap-2 mt-auto">
                   <button
                     onClick={() => handleCardAction('Review / Move', card.title)}
-                    className="flex-1 py-2 bg-gray-700 rounded-lg hover:bg-gray-600 transition-colors duration-200 font-medium text-sm"
+                    className="flex-1 py-2 bg-gray-100 dark:bg-gray-700 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors duration-200 font-medium text-sm text-gray-900 dark:text-white"
                   >
                     Review / Move
                   </button>
                   <button
                     onClick={() => handleCardAction('Apply Now', card.title)}
-                    className="flex-1 py-2 bg-orange-600 rounded-lg hover:bg-orange-700 transition-colors duration-200 font-medium text-sm"
+                    className="flex-1 py-2 bg-orange-500 rounded-lg hover:bg-orange-600 transition-colors duration-200 font-medium text-sm text-white"
                   >
                     Apply Now
                   </button>
@@ -293,4 +295,4 @@ const CareerExploration = () => {
   );
 };
 
-export default CareerExploration;
+export default CareerExplorationPage;

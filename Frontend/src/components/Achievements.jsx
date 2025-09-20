@@ -10,19 +10,19 @@ const achievements = [
 
 const Achievements = () => {
   return (
-    <div className="bg-white p-6 rounded-lg shadow-md">
-      <h3 className="text-xl font-semibold mb-4 text-gray-800">Achievements</h3>
+    <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md transition-colors duration-200">
+      <h3 className="text-xl font-semibold mb-4 text-gray-800 dark:text-white transition-colors duration-200">Achievements</h3>
       <div className="grid grid-cols-3 gap-4 mb-6">
         {achievements.map((ach) => (
-          <div key={ach.id} className="flex items-center justify-center w-14 h-14 bg-orange-100 rounded-full">
+          <div key={ach.id} className="flex items-center justify-center w-14 h-14 bg-orange-100 dark:bg-orange-100 rounded-full transition-colors duration-200">
             <ach.icon size={24} className={ach.color} />
           </div>
         ))}
-        <div className="flex items-center justify-center w-14 h-14 bg-orange-100 rounded-full">
+        <div className="flex items-center justify-center w-14 h-14 bg-orange-100 dark:bg-orange-100 rounded-full transition-colors duration-200">
           <span className="text-orange-500 font-bold text-lg">+</span>
         </div>
       </div>
-      <button className="w-full bg-orange-500 text-white py-2 rounded-md hover:bg-orange-600 transition-colors">
+      <button className="w-full bg-orange-500 text-white py-2 rounded-md hover:bg-orange-600 transition-colors duration-200">
         View All
       </button>
     </div>
