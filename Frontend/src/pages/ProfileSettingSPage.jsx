@@ -92,7 +92,7 @@ const LinkedAccountsSection = () => {
   );
 };
 
-const ProfileSettings = () => {
+const ProfileSettingsPage = () => {
   const [profile, setProfile] = useState({
     name: 'Aditi Sharma',
     email: 'sharma@email.com',
@@ -334,4 +334,4 @@ const ProfileSettings = () => {
   );
 };
 
-export default ProfileSettings;
+export default ProfileSettingsPage;

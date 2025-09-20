@@ -1,7 +1,7 @@
 import React from 'react';
 import Navbar from '../components/Navbar';
 
-const Mentorship = () => {
+const MentorshipPage = () => {
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-[#000000] font-sans text-gray-900 dark:text-white transition-colors duration-200">
       <Navbar />
@@ -22,4 +22,4 @@ const Mentorship = () => {
   );
 };
 
-export default Mentorship;
+export default MentorshipPage;

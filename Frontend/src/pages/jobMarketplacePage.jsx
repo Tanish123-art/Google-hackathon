@@ -2,7 +2,7 @@ import React from 'react';
 import Navbar from '../components/Navbar';
 import { Search, Briefcase, MapPin, CheckCircle, Bookmark } from 'lucide-react';
 
-const JobMarketplace = () => {
+const JobMarketplacePage = () => {
   const recommendedJobs = [
     {
       id: 1,
@@ -183,4 +183,4 @@ const JobMarketplace = () => {
   );
 };
 
-export default JobMarketplace;
+export default JobMarketplacePage;

@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import Navbar from '../components/Navbar';
 import { Search, Lightbulb, TrendingUp, GraduationCap, Briefcase, FlaskConical, Brain, Rocket, Users, Code, BarChart, Settings, Plus } from 'lucide-react';
 
-const CareerExploration = () => {
+const CareerExplorationPage = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [interestInput, setInterestInput] = useState('');
   const [selectedRole1, setSelectedRole1] = useState('Select Aunis');
@@ -295,4 +295,4 @@ const CareerExploration = () => {
   );
 };
 
-export default CareerExploration;
+export default CareerExplorationPage;
