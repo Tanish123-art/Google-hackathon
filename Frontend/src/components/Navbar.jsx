@@ -1,18 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { Briefcase, Bell, User, LogOut } from 'lucide-react';
-<<<<<<< HEAD
 import { Link, useNavigate } from 'react-router-dom';
-=======
-import { Link, useNavigate, useLocation } from 'react-router-dom';
->>>>>>> main
 import ThemeToggle from './ThemeToggle';
 
 const Navbar = () => {
   const navigate = useNavigate();
-<<<<<<< HEAD
-=======
-  const location = useLocation();
->>>>>>> main
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [user, setUser] = useState(null);
 
@@ -44,14 +36,6 @@ const Navbar = () => {
     }
   };
 
-<<<<<<< HEAD
-=======
-  // Helper function to check if a link is active
-  const isActive = (path) => {
-    return location.pathname === path;
-  };
-
->>>>>>> main
   return (
     <nav className="flex items-center justify-between px-8 py-4 nav-gradient text-gray-900 dark:text-white rounded-t-lg relative z-50 overflow-visible">
       {/* Left side: Logo */}
@@ -64,7 +48,6 @@ const Navbar = () => {
       <div className="flex items-center space-x-6">
         {isAuthenticated ? (
           <>
-<<<<<<< HEAD
             <Link to="/" className="hover:text-orange-500 transition-colors duration-200">Dashboard</Link>
             <Link to="/career-exploration" className="hover:text-orange-500 transition-colors duration-200">Career Exploration</Link>
             <Link to="/skill-development" className="hover:text-orange-500 transition-colors duration-200">Skill Development</Link>
@@ -72,32 +55,6 @@ const Navbar = () => {
             <Link to="/job-marketplace" className="hover:text-orange-500 transition-colors duration-200">Job Marketplace</Link>
             <Link to="/assessments" className="hover:text-orange-500 transition-colors duration-200">Assessments</Link>
             <Link to="/resources" className="hover:text-orange-500 transition-colors duration-200">Resources</Link>
-=======
-            <Link to="/" className={`relative hover:text-orange-500 transition-colors duration-200 ${isActive('/') ? 'text-orange-500' : ''}`}>
-              Dashboard
-              {isActive('/') && <div className="absolute bottom-0 left-0 w-full h-0.5 bg-orange-500 animate-pulse"></div>}
-            </Link>
-            <Link to="/career-exploration" className={`relative hover:text-orange-500 transition-colors duration-200 ${isActive('/career-exploration') ? 'text-orange-500' : ''}`}>
-              Career Exploration
-              {isActive('/career-exploration') && <div className="absolute bottom-0 left-0 w-full h-0.5 bg-orange-500 animate-pulse"></div>}
-            </Link>
-            <Link to="/skill-development" className={`relative hover:text-orange-500 transition-colors duration-200 ${isActive('/skill-development') ? 'text-orange-500' : ''}`}>
-              Skill Development
-              {isActive('/skill-development') && <div className="absolute bottom-0 left-0 w-full h-0.5 bg-orange-500 animate-pulse"></div>}
-            </Link>
-            <Link to="/mentorship" className={`relative hover:text-orange-500 transition-colors duration-200 ${isActive('/mentorship') ? 'text-orange-500' : ''}`}>
-              Mentorship
-              {isActive('/mentorship') && <div className="absolute bottom-0 left-0 w-full h-0.5 bg-orange-500 animate-pulse"></div>}
-            </Link>
-            <Link to="/job-marketplace" className={`relative hover:text-orange-500 transition-colors duration-200 ${isActive('/job-marketplace') ? 'text-orange-500' : ''}`}>
-              Job Marketplace
-              {isActive('/job-marketplace') && <div className="absolute bottom-0 left-0 w-full h-0.5 bg-orange-500 animate-pulse"></div>}
-            </Link>
-            <Link to="/assessments" className={`relative hover:text-orange-500 transition-colors duration-200 ${isActive('/assessments') ? 'text-orange-500' : ''}`}>
-              Assessments
-              {isActive('/assessments') && <div className="absolute bottom-0 left-0 w-full h-0.5 bg-orange-500 animate-pulse"></div>}
-            </Link>
->>>>>>> main
             <button onClick={handleBellClick} className="icon-btn bg-transparent p-0 group" title="Notifications">
               <Bell size={20} className="text-gray-600 dark:text-gray-400 icon icon-hover" />
             </button>
@@ -111,14 +68,7 @@ const Navbar = () => {
           </>
         ) : (
           <>
-<<<<<<< HEAD
             <Link to="/signin" className="hover:text-orange-500 transition-colors duration-200">Sign In</Link>
-=======
-            <Link to="/signin" className={`relative hover:text-orange-500 transition-colors duration-200 ${isActive('/signin') ? 'text-orange-500' : ''}`}>
-              Sign In
-              {isActive('/signin') && <div className="absolute bottom-0 left-0 w-full h-0.5 bg-orange-500 animate-pulse"></div>}
-            </Link>
->>>>>>> main
             <Link to="/signup" className="bg-orange-500 text-white px-4 py-2 rounded-lg hover:bg-orange-600 transition-colors duration-200">Sign Up</Link>
             <ThemeToggle />
           </>
