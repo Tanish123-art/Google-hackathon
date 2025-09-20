@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 import AuthLayout from '../auth/AuthLayout';
 import AuthForm from './AuthForm';
 import { SignInFormData, SignUpFormData } from '../types/auth';
@@ -10,8 +11,6 @@ const SignInPage: React.FC = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  import axios from 'axios';
-// ...
   const handleAuth = async (data: SignInFormData | SignUpFormData) => {
     setIsLoading(true);
     setError(null);

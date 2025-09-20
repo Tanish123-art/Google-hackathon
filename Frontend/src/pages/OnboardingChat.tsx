@@ -191,6 +191,23 @@ const OnboardingChat: React.FC = () => {
     const current = steps[Math.min(step, steps.length - 1)];
     const isOptional = optionalKeys.includes(current.key as string);
 
+    const finalizeOnboarding = async () => {
+      const token = localStorage.getItem('token');
+      if (token) {
+        try {
+          await axios.post(`${import.meta.env.VITE_BACKEND_URL}/api/auth/onboarding`, { ...required, ...optional }, {
+            headers: {
+              'x-auth-token': token,
+            },
+          });
+        } catch (error) {
+          console.error("Onboarding API call failed", error);
+        }
+      }
+      setMessages(m => [...m, { id: `d${m.length}`, role: 'bot', text: 'Thanks! Your profile is ready. Click Next to continue to your dashboard.' }]);
+      setCompleted(true);
+    };
+
     if (!trimmed && isOptional) {
       // silently skip optional question and advance
       const nextStep = step + 1;
@@ -200,15 +217,7 @@ const OnboardingChat: React.FC = () => {
         setMessages(m => [...m, { id: `p${m.length}`, role: 'bot', text: next.prompt }]);
       } else {
         // Skipped the last question: finalize and show Next
-        const token = localStorage.getItem('token');
-await axios.post(`${import.meta.env.VITE_BACKEND_URL}/api/auth/onboarding`, { ...required, ...optional }, {
-            headers: {
-              'x-auth-token': token,
-            },
-          });
-        }
-        setMessages(m => [...m, { id: `d${m.length}`, role: 'bot', text: 'Thanks! Your profile is ready. Click Next to continue to your dashboard.' }]);
-        setCompleted(true);
+        await finalizeOnboarding();
       }
       return;
     }
@@ -231,16 +240,7 @@ await axios.post(`${import.meta.env.VITE_BACKEND_URL}/api/auth/onboarding`, { ..
       setMessages(m => [...m, { id: `p${m.length}`, role: 'bot', text: next.prompt }]);
     } else {
       // Done: persist data and show Next button to continue
-      const token = localStorage.getItem('token');
-      if (token) {
-        await axios.post('http://localhost:3000/api/auth/onboarding', { ...required, ...optional }, {
-          headers: {
-            'x-auth-token': token,
-          },
-        });
-      }
-      setMessages(m => [...m, { id: `d${m.length}`, role: 'bot', text: 'Thanks! Your profile is ready. Click Next to continue to your dashboard.' }]);
-      setCompleted(true);
+      await finalizeOnboarding();
     }
   };
 
