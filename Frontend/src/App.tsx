@@ -1,12 +1,12 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { ThemeProvider } from './contexts/ThemeContext';
-import Dashboard from './Dashboard';
-import ProfileSettings from './ProfileSettings';
-import CareerExploration from './CareerExploration';
-import SkillDevelopment from './SkillDevelopment';
-import Mentorship from './Mentorship';
-import JobMarketplace from './JobMarketplace';
+import DashboardPage from './pages/DashboardPage';
+import ProfileSettingsPage from './pages/ProfileSettingsPage';
+import CareerExplorationPage from './pages/CareerExplorationPage';
+import SkillDevelopment from './pages/SkillDevelopment';
+import MentorshipPage from './pages/MentorshipPage';
+import JobMarketplacePage from './pages/JobMarketplacePage';
 import SignInPage from './pages/SignInPage';
 import SignUpPage from './pages/SignUpPage';
 import OnboardingChat from './pages/OnboardingChat';
@@ -20,7 +20,7 @@ function App() {
             path="/"
             element={
               localStorage.getItem('isAuthenticated') === 'true'
-                ? <Dashboard />
+                ? <DashboardPage />
                 : <Navigate to="/signin" replace />
             }
           />
@@ -44,7 +44,7 @@ function App() {
             path="/profile"
             element={
               localStorage.getItem('isAuthenticated') === 'true'
-                ? <ProfileSettings />
+                ? <ProfileSettingsPage />
                 : <Navigate to="/signin" replace />
             }
           />
@@ -60,7 +60,7 @@ function App() {
             path="/assessments"
             element={
               localStorage.getItem('isAuthenticated') === 'true'
-                ? <Dashboard />
+                ? <DashboardPage />
                 : <Navigate to="/signin" replace />
             }
           />
@@ -68,7 +68,7 @@ function App() {
             path="/resources"
             element={
               localStorage.getItem('isAuthenticated') === 'true'
-                ? <Dashboard />
+                ? <DashboardPage />
                 : <Navigate to="/signin" replace />
             }
           />
@@ -76,7 +76,7 @@ function App() {
             path="/career-exploration"
             element={
               localStorage.getItem('isAuthenticated') === 'true'
-                ? <CareerExploration />
+                ? <CareerExplorationPage />
                 : <Navigate to="/signin" replace />
             }
           />
@@ -92,7 +92,7 @@ function App() {
             path="/mentorship"
             element={
               localStorage.getItem('isAuthenticated') === 'true'
-                ? <Mentorship />
+                ? <MentorshipPage />
                 : <Navigate to="/signin" replace />
             }
           />
@@ -100,7 +100,7 @@ function App() {
             path="/job-marketplace"
             element={
               localStorage.getItem('isAuthenticated') === 'true'
-                ? <JobMarketplace />
+                ? <JobMarketplacePage />
                 : <Navigate to="/signin" replace />
             }
           />

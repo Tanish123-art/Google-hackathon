@@ -36,7 +36,7 @@ const ThemeToggle: React.FC = () => {
             className={`w-full text-left px-4 py-2 text-sm rounded-t-lg hover:bg-gray-100 dark:hover:bg-gray-800 text-gray-800 dark:text-gray-100 ${theme === 'system' ? 'font-semibold' : ''}`}
             onClick={() => { setTheme('system'); setOpen(false); }}
           >
-            System Default
+            System Default(Dark)
           </button>
           <button
             className={`w-full text-left px-4 py-2 text-sm hover:bg-gray-100 dark:hover:bg-gray-800 text-gray-800 dark:text-gray-100 ${theme === 'light' ? 'font-semibold' : ''}`}

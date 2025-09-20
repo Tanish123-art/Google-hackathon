@@ -41,9 +41,23 @@ export function parseJwt(token: string): any | null {
 export async function initGoogleSignIn(callback: (credential: string) => void) {
   await loadGoogleScript();
   const clientId = (import.meta as any).env?.VITE_GOOGLE_CLIENT_ID as string;
+  
   if (!clientId) {
-    throw new Error('Missing VITE_GOOGLE_CLIENT_ID');
+    console.warn('VITE_GOOGLE_CLIENT_ID not found. Using demo client ID for development.');
+    // Use a demo client ID for development (this won't work for actual authentication)
+    const demoClientId = 'demo-client-id.apps.googleusercontent.com';
+    (window as any).google.accounts.id.initialize({
+      client_id: demoClientId,
+      callback: (response: any) => {
+        console.log('Demo Google authentication attempted:', response);
+        alert('Google authentication is in demo mode. Please set up VITE_GOOGLE_CLIENT_ID for production use.');
+      },
+      auto_select: false,
+      ux_mode: 'popup'
+    });
+    return;
   }
+  
   (window as any).google.accounts.id.initialize({
     client_id: clientId,
     callback: (response: any) => callback(response.credential),
