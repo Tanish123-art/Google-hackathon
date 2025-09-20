@@ -1,6 +1,7 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 import ThemeToggle from '../components/ThemeToggle';
 import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 
 type Message = {
   id: string;
@@ -184,7 +185,7 @@ const OnboardingChat: React.FC = () => {
 
   const optionalKeys = ['skills','resumeUrl','careerGoals','notifications'];
 
-  const handleSend = (val: string) => {
+  const handleSend = async (val: string) => {
     const trimmed = val.trim();
 
     const current = steps[Math.min(step, steps.length - 1)];
@@ -199,26 +200,14 @@ const OnboardingChat: React.FC = () => {
         setMessages(m => [...m, { id: `p${m.length}`, role: 'bot', text: next.prompt }]);
       } else {
         // Skipped the last question: finalize and show Next
-        const profile = { required, optional };
-        localStorage.setItem('onboarding_profile', JSON.stringify(profile));
-
-        const userStr = localStorage.getItem('user');
-        if (userStr) {
-          try {
-            const u = JSON.parse(userStr);
-            const updated = {
-              ...u,
-              fullName: required.fullName || u.fullName,
-              location: required.location || u.location,
-              language: required.language,
-              academicStream: required.academicStream,
-              interests: required.interests,
-              workStyle: required.workStyle,
-            };
-            localStorage.setItem('user', JSON.stringify(updated));
-          } catch {}
+        const token = localStorage.getItem('token');
+        if (token) {
+          await axios.post('http://localhost:3000/api/auth/onboarding', { ...required, ...optional }, {
+            headers: {
+              'x-auth-token': token,
+            },
+          });
         }
-
         setMessages(m => [...m, { id: `d${m.length}`, role: 'bot', text: 'Thanks! Your profile is ready. Click Next to continue to your dashboard.' }]);
         setCompleted(true);
       }
@@ -243,27 +232,14 @@ const OnboardingChat: React.FC = () => {
       setMessages(m => [...m, { id: `p${m.length}`, role: 'bot', text: next.prompt }]);
     } else {
       // Done: persist data and show Next button to continue
-      const profile = { required, optional };
-      localStorage.setItem('onboarding_profile', JSON.stringify(profile));
-
-      // Update existing user profile details for ProfileSettings and Dashboard
-      const userStr = localStorage.getItem('user');
-      if (userStr) {
-        try {
-          const u = JSON.parse(userStr);
-          const updated = {
-            ...u,
-            fullName: required.fullName || u.fullName,
-            location: required.location || u.location,
-            language: required.language,
-            academicStream: required.academicStream,
-            interests: required.interests,
-            workStyle: required.workStyle,
-          };
-          localStorage.setItem('user', JSON.stringify(updated));
-        } catch {}
+      const token = localStorage.getItem('token');
+      if (token) {
+        await axios.post('http://localhost:3000/api/auth/onboarding', { ...required, ...optional }, {
+          headers: {
+            'x-auth-token': token,
+          },
+        });
       }
-
       setMessages(m => [...m, { id: `d${m.length}`, role: 'bot', text: 'Thanks! Your profile is ready. Click Next to continue to your dashboard.' }]);
       setCompleted(true);
     }

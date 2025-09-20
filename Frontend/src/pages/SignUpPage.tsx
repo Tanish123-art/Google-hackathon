@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 import AuthLayout from '../auth/AuthLayout';
 import AuthForm from './AuthForm';
 import { SignInFormData, SignUpFormData } from '../types/auth';
@@ -15,24 +16,13 @@ const SignUpPage: React.FC = () => {
     setError(null);
 
     try {
-      // Simulate API call
-      await new Promise(resolve => setTimeout(resolve, 1000));
-      
-      // For demo purposes, accept any valid data
       if ('fullName' in data && 'agreeToTerms' in data && data.fullName && data.email && data.password && data.agreeToTerms) {
-        // Store user data in localStorage
-        const userData = {
-          id: '1',
-          fullName: data.fullName,
+        const res = await axios.post('http://localhost:3000/api/auth/signup', {
+          username: data.fullName,
           email: data.email,
-          avatar: 'https://images.pexels.com/photos/1366919/pexels-photo-1366919.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2',
-          location: 'Bengaluru, India',
-          createdAt: new Date()
-        };
-        
-        localStorage.setItem('user', JSON.stringify(userData));
-        localStorage.setItem('isAuthenticated', 'true');
-        
+          password: data.password,
+        });
+        localStorage.setItem('token', res.data.token);
         if (typeof window !== 'undefined') {
           window.location.replace('/onboarding');
         } else {
