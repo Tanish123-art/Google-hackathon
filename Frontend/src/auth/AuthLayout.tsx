@@ -37,8 +37,4 @@ const AuthLayout: React.FC<AuthLayoutProps> = ({ children, title, subtitle }) =>
   );
 };
 
-<<<<<<<< HEAD:Frontend/src/auth/AuthLayout.tsx
 export default AuthLayout;
-========
-export default AuthLayout;
->>>>>>>> main:Frontend/src/contexts/AuthLayout.tsx
