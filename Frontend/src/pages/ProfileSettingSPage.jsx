@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import Navbar from './components/Navbar';
+import Navbar from '../components/Navbar';
 import { Pencil, Bell, Lock, ChevronDown, ChevronUp, Link as LinkIcon } from 'lucide-react';
 
 const ToggleSwitch = ({ label, initialChecked, onToggle }) => {

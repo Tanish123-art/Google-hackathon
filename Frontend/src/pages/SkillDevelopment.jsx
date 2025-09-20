@@ -1,5 +1,5 @@
 import React from 'react';
-import Navbar from './components/Navbar';
+import Navbar from '../components/Navbar';
 import { Book, Play, BarChart, Award, ArrowRight, User, Code, Database, FlaskConical, Rocket, Settings, CircleDot, Square, Mail, GraduationCap } from 'lucide-react';
 
 const SkillDevelopment = () => {

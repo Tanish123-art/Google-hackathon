@@ -1,8 +1,8 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import AuthLayout from '../AuthLayout';
-import SignInForm from '../SignInForm';
-import { SignInFormData } from '../types/auth';
+import AuthLayout from '../auth/AuthLayout';
+import AuthForm from './AuthForm';
+import { SignInFormData, SignUpFormData } from '../types/auth';
 import { initGoogleSignIn, renderGoogleButton, parseJwt } from '../utils/googleAuth';
 
 const SignInPage: React.FC = () => {
@@ -10,7 +10,7 @@ const SignInPage: React.FC = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  const handleSignIn = async (data: SignInFormData) => {
+  const handleAuth = async (data: SignInFormData | SignUpFormData) => {
     setIsLoading(true);
     setError(null);
 
@@ -22,7 +22,7 @@ const SignInPage: React.FC = () => {
       const demoEmail = 'demo@counselling.app';
 
       // For demo purposes, accept any email/password
-      if (data.email && data.password) {
+      if ('email' in data && 'password' in data && data.email && data.password) {
         // Store user data in localStorage
         const userData = {
           id: '1',
@@ -51,7 +51,7 @@ const SignInPage: React.FC = () => {
     }
   };
 
-  const handleSwitchToSignUp = () => {
+  const handleSwitchMode = () => {
     navigate('/signup');
   };
 
@@ -96,9 +96,10 @@ const SignInPage: React.FC = () => {
         <div ref={googleDivRef} />
       </div>
       <div className="auth-or"><span>or</span></div>
-      <SignInForm
-        onSubmit={handleSignIn}
-        onSwitchToSignUp={handleSwitchToSignUp}
+      <AuthForm
+        mode="signin"
+        onSubmit={handleAuth}
+        onSwitchMode={handleSwitchMode}
         isLoading={isLoading}
         error={error}
       />

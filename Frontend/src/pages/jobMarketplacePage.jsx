@@ -1,5 +1,5 @@
 import React from 'react';
-import Navbar from './components/Navbar';
+import Navbar from '../components/Navbar';
 import { Search, Briefcase, MapPin, CheckCircle, Bookmark } from 'lucide-react';
 
 const JobMarketplace = () => {

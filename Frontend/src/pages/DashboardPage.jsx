@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import Navbar from './components/Navbar';
-import CareerRecommendations from './components/CareerRecommendations';
-import SkillProgress from './components/SkillProgress';
-import UpcomingLearningModules from './components/UpcomingLearningModules';
-import Achievements from './components/Achievements';
+import Navbar from '../components/Navbar';
+import CareerRecommendations from '../components/CareerRecommendations';
+import SkillProgress from '../components/SkillProgress';
+import UpcomingLearningModules from '../components/UpcomingLearningModules';
+import Achievements from '../components/Achievements';
 
 // 🔹 New Component for Assessment Journey UI
 const AssessmentJourney = () => {
