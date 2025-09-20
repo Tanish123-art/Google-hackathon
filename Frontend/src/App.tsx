@@ -7,7 +7,8 @@ import CareerExploration from './CareerExploration';
 import SkillDevelopment from './SkillDevelopment';
 import Mentorship from './Mentorship';
 import JobMarketplace from './JobMarketplace';
-import AssessmentJourney from './assessments';
+import AssessmentJourney from './Assessments';
+import AssessmentPage from './pages/AssessmentPage';
 import SignInPage from './pages/SignInPage';
 import SignUpPage from './pages/SignUpPage';
 import OnboardingChat from './pages/OnboardingChat';
@@ -62,6 +63,14 @@ function App() {
             element={
               localStorage.getItem('isAuthenticated') === 'true'
                 ? <AssessmentJourney />
+                : <Navigate to="/signin" replace />
+            }
+          />
+          <Route
+            path="/assessment/:id"
+            element={
+              localStorage.getItem('isAuthenticated') === 'true'
+                ? <AssessmentPage />
                 : <Navigate to="/signin" replace />
             }
           />

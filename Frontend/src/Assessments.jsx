@@ -1,13 +1,14 @@
 import React from "react";
+import { Link } from "react-router-dom";
 import Navbar from "./components/Navbar";
 
 const AssessmentJourney = () => {
   // Example stage data
   const stages = [
-    { id: 1, label: "Stage 1: Foundational Aptitude", active: true },
-    { id: 2, label: "Stage 2: Core Skills", active: true },
-    { id: 3, label: "Stage 3: Advanced Challenges", active: true },
-    { id: 4, label: "Stage 4: Mastery", active: false },
+    { id: 1, label: "Stage 1: Foundational Aptitude", status: "completed" },
+    { id: 2, label: "Stage 2: Core Skills", status: "active" },
+    { id: 3, label: "Stage 3: Advanced Challenges", status: "locked" },
+    { id: 4, label: "Stage 4: Mastery", status: "locked" },
   ];
 
   // Example card data
@@ -19,6 +20,7 @@ const AssessmentJourney = () => {
       time: "20 min",
       points: "130 XP",
       action: "View",
+      pathId: null,
     },
     {
       title: "Skill-Based Challenges",
@@ -27,6 +29,7 @@ const AssessmentJourney = () => {
       time: "20 min",
       points: "130 XP",
       action: "Start Assessment",
+      pathId: "verbal-ability",
     },
     {
       title: "Personality Quizzes",
@@ -35,6 +38,7 @@ const AssessmentJourney = () => {
       time: "20 min",
       points: "150 XP",
       action: "Start Quiz",
+      pathId: "personality-quiz",
     },
     {
       title: "Coding Logic",
@@ -44,6 +48,7 @@ const AssessmentJourney = () => {
       points: "200 XP",
       action: "Completed",
       disabled: true,
+      pathId: null,
     },
     {
       title: "Design Principles",
@@ -52,6 +57,7 @@ const AssessmentJourney = () => {
       time: "40 min",
       points: "230 XP",
       action: "Start Assessment",
+      pathId: "design-principles",
     },
     {
       title: "Recommended Next Steps",
@@ -60,6 +66,7 @@ const AssessmentJourney = () => {
       time: "30 min",
       points: "520 XP",
       action: "Explore",
+      pathId: null,
     },
   ];
 
@@ -72,38 +79,102 @@ const AssessmentJourney = () => {
             Assessment Journey
           </h2>
 
-          {/* 🔹 Timeline Progression */}
+          {/* 🔹 Modern Timeline Progression */}
           <div className="flex items-center justify-between mb-12 relative">
             {stages.map((stage, idx) => (
               <div
                 key={stage.id}
                 className="flex flex-col items-center flex-1 relative"
               >
-                {/* Node */}
-                <div
-                  className={`w-10 h-10 rounded-full flex items-center justify-center font-bold z-10 
-              ${
-                stage.active
-                  ? "bg-gradient-to-r from-orange-500 to-pink-500 text-white"
-                  : "bg-gray-700 text-gray-400"
-              }
-            `}
-                >
-                  {stage.id}
+                {/* Double-ring Node with Icon */}
+                <div className="relative z-10">
+                  {/* Outer ring */}
+                  <div
+                    className={`w-16 h-16 rounded-full flex items-center justify-center relative
+                      ${
+                        stage.status === "completed"
+                          ? "bg-gradient-to-r from-orange-500 to-pink-500"
+                          : stage.status === "active"
+                          ? "bg-gradient-to-r from-orange-500 to-pink-500"
+                          : "bg-gray-700"
+                      }
+                    `}
+                  >
+                    {/* Inner ring */}
+                    <div
+                      className={`w-12 h-12 rounded-full flex items-center justify-center
+                        ${
+                          stage.status === "completed"
+                            ? "bg-gray-900"
+                            : stage.status === "active"
+                            ? "bg-gray-900"
+                            : "bg-gray-800"
+                        }
+                      `}
+                    >
+                      {/* Icon */}
+                      {stage.status === "completed" ? (
+                        <svg
+                          className="w-6 h-6 text-green-400"
+                          fill="none"
+                          stroke="currentColor"
+                          viewBox="0 0 24 24"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={2}
+                            d="M5 13l4 4L19 7"
+                          />
+                        </svg>
+                      ) : stage.status === "active" ? (
+                        <svg
+                          className="w-6 h-6 text-orange-400"
+                          fill="none"
+                          stroke="currentColor"
+                          viewBox="0 0 24 24"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={2}
+                            d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
+                          />
+                        </svg>
+                      ) : (
+                        <svg
+                          className="w-6 h-6 text-gray-500"
+                          fill="none"
+                          stroke="currentColor"
+                          viewBox="0 0 24 24"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={2}
+                            d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"
+                          />
+                        </svg>
+                      )}
+                    </div>
+                  </div>
                 </div>
+                
                 {/* Label */}
-                <p className="text-sm mt-2 text-gray-300 text-center">
+                <p className="text-sm mt-3 text-gray-300 text-center max-w-32">
                   {stage.label}
                 </p>
-                {/* Connector line */}
+                
+                {/* Centered Connector line */}
                 {idx < stages.length - 1 && (
                   <div
-                    className={`absolute top-5 left-1/2 w-full h-1 -translate-x-1/2 
-                ${
-                  stage.active
-                    ? "bg-gradient-to-r from-orange-500 to-pink-500"
-                    : "bg-gray-600"
-                }`}
+                    className={`absolute top-8 left-1/2 w-full h-0.5 -translate-x-1/2 z-0
+                      ${
+                        stage.status === "completed" || stage.status === "active"
+                          ? "bg-gradient-to-r from-orange-500 to-pink-500"
+                          : "bg-gray-600"
+                      }
+                    `}
                   ></div>
                 )}
               </div>
@@ -147,17 +218,31 @@ const AssessmentJourney = () => {
                 </div>
 
                 {/* Action Button */}
-                <button
-                  className={`mt-4 w-full py-2 rounded-lg font-semibold 
-              ${
-                card.disabled
-                  ? "bg-gray-700 text-gray-400 cursor-not-allowed"
-                  : "bg-gradient-to-r from-orange-500 to-pink-500 text-white"
-              }`}
-                  disabled={card.disabled}
-                >
-                  {card.action}
-                </button>
+                {card.pathId && (card.action === "Start Assessment" || card.action === "Start Quiz") ? (
+                  <Link
+                    to={`/assessment/${card.pathId}`}
+                    className={`mt-4 w-full py-2 rounded-lg font-semibold text-center block transition-all duration-200
+                      ${
+                        card.disabled
+                          ? "bg-gray-700 text-gray-400 cursor-not-allowed"
+                          : "bg-gradient-to-r from-orange-500 to-pink-500 text-white hover:shadow-lg hover:scale-105"
+                      }`}
+                  >
+                    {card.action}
+                  </Link>
+                ) : (
+                  <button
+                    className={`mt-4 w-full py-2 rounded-lg font-semibold 
+                      ${
+                        card.disabled
+                          ? "bg-gray-700 text-gray-400 cursor-not-allowed"
+                          : "bg-gradient-to-r from-orange-500 to-pink-500 text-white hover:shadow-lg"
+                      }`}
+                    disabled={card.disabled}
+                  >
+                    {card.action}
+                  </button>
+                )}
               </div>
             ))}
           </div>
