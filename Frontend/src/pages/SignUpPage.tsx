@@ -17,7 +17,7 @@ const SignUpPage: React.FC = () => {
 
     try {
       if ('fullName' in data && 'agreeToTerms' in data && data.fullName && data.email && data.password && data.agreeToTerms) {
-        const res = await axios.post('http://localhost:3000/api/auth/signup', {
+        const res = await axios.post(`${import.meta.env.VITE_BACKEND_URL}/api/auth/signup`, {
           username: data.fullName,
           email: data.email,
           password: data.password,

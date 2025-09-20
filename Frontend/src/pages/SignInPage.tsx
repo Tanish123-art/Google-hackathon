@@ -10,32 +10,19 @@ const SignInPage: React.FC = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
+  import axios from 'axios';
+// ...
   const handleAuth = async (data: SignInFormData | SignUpFormData) => {
     setIsLoading(true);
     setError(null);
 
     try {
-      // Simulate API call
-      await new Promise(resolve => setTimeout(resolve, 1000));
-      
-      // Demo account support
-      const demoEmail = 'demo@counselling.app';
-
-      // For demo purposes, accept any email/password
       if ('email' in data && 'password' in data && data.email && data.password) {
-        // Store user data in localStorage
-        const userData = {
-          id: '1',
-          fullName: data.email === demoEmail ? 'Demo User' : 'New User',
+        const res = await axios.post(`${import.meta.env.VITE_BACKEND_URL}/api/auth/signin`, {
           email: data.email,
-          avatar: 'https://images.pexels.com/photos/1366919/pexels-photo-1366919.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2',
-          location: 'Bengaluru, India',
-          createdAt: new Date()
-        };
-        
-        localStorage.setItem('user', JSON.stringify(userData));
-        localStorage.setItem('isAuthenticated', 'true');
-        
+          password: data.password,
+        });
+        localStorage.setItem('token', res.data.token);
         if (typeof window !== 'undefined') {
           window.location.replace('/');
         } else {

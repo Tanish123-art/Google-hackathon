@@ -201,8 +201,7 @@ const OnboardingChat: React.FC = () => {
       } else {
         // Skipped the last question: finalize and show Next
         const token = localStorage.getItem('token');
-        if (token) {
-          await axios.post('http://localhost:3000/api/auth/onboarding', { ...required, ...optional }, {
+await axios.post(`${import.meta.env.VITE_BACKEND_URL}/api/auth/onboarding`, { ...required, ...optional }, {
             headers: {
               'x-auth-token': token,
             },
