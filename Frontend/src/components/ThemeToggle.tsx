@@ -31,7 +31,7 @@ const ThemeToggle: React.FC = () => {
       </button>
 
       {open && (
-        <div className="absolute right-0 mt-2 w-48 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 shadow-lg z-50 divide-y divide-gray-200 dark:divide-gray-800">
+        <div className="absolute right-0 w-48 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 shadow-lg z-50 divide-y divide-gray-200 dark:divide-gray-800">
           <button
             className={`w-full text-left px-4 py-2 text-sm rounded-t-lg hover:bg-gray-100 dark:hover:bg-gray-800 text-gray-800 dark:text-gray-100 ${theme === 'system' ? 'font-semibold' : ''}`}
             onClick={() => { setTheme('system'); setOpen(false); }}

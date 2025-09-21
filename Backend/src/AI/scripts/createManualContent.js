@@ -1,0 +1,150 @@
+import fs from 'fs';
+import path from 'path';
+import { fileURLToPath } from 'url';
+import { BOOK_CONFIG, getReferenceBookPath, getChunksOutputPath } from '../config/bookConfig.js';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+// Manual content creation for testing - since PDF processing has issues
+async function createManualContent() {
+  console.log('📚 Creating manual content for testing...');
+  
+  // Create sample chunks that represent typical aptitude test content
+  const sampleChunks = [
+    {
+      id: 'chunk-1',
+      text: 'Mathematical reasoning involves the ability to understand and solve problems using mathematical concepts. This includes arithmetic, algebra, geometry, and data interpretation. Key skills include pattern recognition, logical deduction, and quantitative analysis.',
+      chunkIndex: 0,
+      createdAt: new Date().toISOString(),
+      source: 'reference-book.pdf'
+    },
+    {
+      id: 'chunk-2', 
+      text: 'Verbal reasoning tests assess the ability to understand and analyze written information. This includes reading comprehension, vocabulary, analogies, and sentence completion. Critical thinking and inference skills are essential for success.',
+      chunkIndex: 1,
+      createdAt: new Date().toISOString(),
+      source: 'reference-book.pdf'
+    },
+    {
+      id: 'chunk-3',
+      text: 'Logical reasoning involves the ability to analyze arguments, identify patterns, and draw valid conclusions. This includes syllogisms, logical sequences, and deductive reasoning. The key is to identify premises and determine what logically follows.',
+      chunkIndex: 2,
+      createdAt: new Date().toISOString(),
+      source: 'reference-book.pdf'
+    },
+    {
+      id: 'chunk-4',
+      text: 'Analytical reasoning tests problem-solving abilities and critical thinking skills. This includes evaluating arguments, analyzing data, and making sound judgments. The focus is on reasoning ability rather than specific knowledge.',
+      chunkIndex: 3,
+      createdAt: new Date().toISOString(),
+      source: 'reference-book.pdf'
+    },
+    {
+      id: 'chunk-5',
+      text: 'Spatial reasoning involves the ability to visualize and manipulate objects in space. This includes pattern recognition, shape analysis, and spatial relationships. These skills are important for engineering and design fields.',
+      chunkIndex: 4,
+      createdAt: new Date().toISOString(),
+      source: 'reference-book.pdf'
+    },
+    {
+      id: 'chunk-6',
+      text: 'Data interpretation requires the ability to analyze charts, graphs, and statistical information. This includes understanding trends, calculating percentages, and drawing conclusions from numerical data.',
+      chunkIndex: 5,
+      createdAt: new Date().toISOString(),
+      source: 'reference-book.pdf'
+    },
+    {
+      id: 'chunk-7',
+      text: 'Problem-solving strategies include breaking down complex problems into smaller parts, identifying key information, and applying systematic approaches. The goal is to find efficient and effective solutions.',
+      chunkIndex: 6,
+      createdAt: new Date().toISOString(),
+      source: 'reference-book.pdf'
+    },
+    {
+      id: 'chunk-8',
+      text: 'Critical thinking involves evaluating information objectively, identifying assumptions, and making reasoned judgments. This includes analyzing arguments, detecting bias, and assessing evidence quality.',
+      chunkIndex: 7,
+      createdAt: new Date().toISOString(),
+      source: 'reference-book.pdf'
+    },
+    {
+      id: 'chunk-9',
+      text: 'Pattern recognition is the ability to identify regularities and relationships in data or sequences. This skill is fundamental to mathematical reasoning, logical thinking, and problem-solving across various domains.',
+      chunkIndex: 8,
+      createdAt: new Date().toISOString(),
+      source: 'reference-book.pdf'
+    },
+    {
+      id: 'chunk-10',
+      text: 'Sequence completion tests the ability to identify patterns and predict the next element in a series. This requires analyzing the relationship between elements and applying logical rules to continue the pattern.',
+      chunkIndex: 9,
+      createdAt: new Date().toISOString(),
+      source: 'reference-book.pdf'
+    }
+  ];
+
+  // Add more chunks with specific aptitude test content
+  const additionalChunks = [
+    {
+      id: 'chunk-11',
+      text: 'Arithmetic operations include addition, subtraction, multiplication, and division. Word problems require translating verbal descriptions into mathematical equations and solving them systematically.',
+      chunkIndex: 10,
+      createdAt: new Date().toISOString(),
+      source: 'reference-book.pdf'
+    },
+    {
+      id: 'chunk-12',
+      text: 'Algebra involves working with variables and equations. Key concepts include solving linear equations, working with inequalities, and understanding algebraic expressions and their properties.',
+      chunkIndex: 11,
+      createdAt: new Date().toISOString(),
+      source: 'reference-book.pdf'
+    },
+    {
+      id: 'chunk-13',
+      text: 'Geometry tests spatial understanding and mathematical reasoning. Topics include angles, triangles, circles, area, perimeter, and coordinate geometry. Visualization skills are essential.',
+      chunkIndex: 12,
+      createdAt: new Date().toISOString(),
+      source: 'reference-book.pdf'
+    },
+    {
+      id: 'chunk-14',
+      text: 'Statistics and probability involve analyzing data and calculating likelihoods. Key concepts include mean, median, mode, standard deviation, and probability calculations.',
+      chunkIndex: 13,
+      createdAt: new Date().toISOString(),
+      source: 'reference-book.pdf'
+    },
+    {
+      id: 'chunk-15',
+      text: 'Reading comprehension requires understanding main ideas, supporting details, and making inferences. Critical skills include identifying tone, purpose, and logical relationships in text.',
+      chunkIndex: 14,
+      createdAt: new Date().toISOString(),
+      source: 'reference-book.pdf'
+    }
+  ];
+
+  const allChunks = [...sampleChunks, ...additionalChunks];
+
+  console.log(`✅ Created ${allChunks.length} sample chunks`);
+  
+  // Save chunks to file
+  fs.writeFileSync(getChunksOutputPath(), JSON.stringify(allChunks, null, 2));
+  
+  console.log('💾 Sample chunks saved to:', getChunksOutputPath());
+  
+  return allChunks;
+}
+
+// Run the manual content creation
+if (import.meta.url === `file://${process.argv[1]}`) {
+  createManualContent()
+    .then(() => {
+      console.log('🎉 Manual content creation complete!');
+      console.log('You can now use the intelligent aptitude test generation.');
+    })
+    .catch(error => {
+      console.error('❌ Error creating manual content:', error);
+    });
+}
+
+export default createManualContent;

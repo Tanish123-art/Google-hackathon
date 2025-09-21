@@ -1,5 +1,4 @@
 import React from 'react';
-import Navbar from '../components/Navbar';
 import { Book, Play, BarChart, Award, ArrowRight, User, Code, Database, FlaskConical, Rocket, Settings, CircleDot, Square, Mail, GraduationCap } from 'lucide-react';
 
 const SkillDevelopment = () => {
@@ -29,7 +28,6 @@ const SkillDevelopment = () => {
 
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-[#000000] font-sans text-gray-900 dark:text-white transition-colors duration-200">
-      <Navbar />
       <div className="px-8 py-8">
         <h1 className="text-3xl sm:text-4xl font-bold mb-8 text-gradient">Skill Development Hub</h1>
 

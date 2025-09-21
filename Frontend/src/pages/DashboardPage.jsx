@@ -1,9 +1,15 @@
 import React, { useState, useEffect } from 'react';
-import Navbar from '../components/Navbar';
 import CareerRecommendations from '../components/CareerRecommendations';
 import SkillProgress from '../components/SkillProgress';
 import UpcomingLearningModules from '../components/UpcomingLearningModules';
 import Achievements from '../components/Achievements';
+
+// Debug authentication state
+console.log('🔍 Dashboard - Auth State:', {
+  token: localStorage.getItem('token') ? 'Present' : 'Missing',
+  isAuthenticated: localStorage.getItem('isAuthenticated'),
+  user: localStorage.getItem('user') ? 'Present' : 'Missing'
+});
 
 // 🔹 New Component for Assessment Journey UI
 const AssessmentJourney = () => {
@@ -173,10 +179,8 @@ const Dashboard = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-[#000000] font-sans transition-colors duration-200">
+    <div className="bg-gray-50 dark:bg-[#000000] font-sans transition-colors duration-200">
       <div className="bg-gray-50 dark:bg-[#000000] overflow-hidden transition-colors duration-200">
-        <Navbar />
-
         <div className="px-8 py-8">
           {/* Greeting + Avatar */}
           <div className="flex flex-col sm:flex-row items-center justify-between mb-8">

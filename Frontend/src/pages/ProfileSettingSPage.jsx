@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import Navbar from '../components/Navbar';
 import { Pencil, Bell, Lock, ChevronDown, ChevronUp, Link as LinkIcon } from 'lucide-react';
 
 const ToggleSwitch = ({ label, initialChecked, onToggle }) => {
@@ -172,7 +171,6 @@ const ProfileSettingsPage = () => {
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-[#000000] font-sans transition-colors duration-200">
       <div className="bg-gray-50 dark:bg-[#000000] overflow-hidden transition-colors duration-200">
-        <Navbar />
 
         <div className="px-8 py-8">
           <h1 className="text-3xl sm:text-4xl font-bold text-gray-900 dark:text-white mb-8">Profile Settings</h1>

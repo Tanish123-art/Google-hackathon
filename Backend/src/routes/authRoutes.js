@@ -7,6 +7,7 @@ import { verifyOtp } from '../auth/verifyOtp.js';
 import { signIn } from '../auth/signin.js';
 import { forgotPassword } from '../auth/forgotPassword.js';
 import { resetPassword } from '../auth/resetPassword.js';
+import { googleAuth } from '../auth/googleAuth.js';
 
 // @route   POST api/auth/signup
 // @desc    Register user
@@ -22,6 +23,11 @@ router.post('/verify-otp', verifyOtp);
 // @desc    Authenticate user & get token
 // @access  Public
 router.post('/signin', signIn);
+
+// @route   POST api/auth/google
+// @desc    Authenticate user with Google & get token
+// @access  Public
+router.post('/google', googleAuth);
 
 // @route   POST api/auth/forgot-password
 // @desc    Forgot password

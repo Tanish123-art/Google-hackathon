@@ -1,5 +1,4 @@
 import React from 'react';
-import Navbar from '../components/Navbar';
 import { Search, Briefcase, MapPin, CheckCircle, Bookmark } from 'lucide-react';
 
 const JobMarketplacePage = () => {
@@ -73,7 +72,6 @@ const JobMarketplacePage = () => {
 
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-[#000000] font-sans text-gray-900 dark:text-white transition-colors duration-200">
-      <Navbar />
       <div className="px-8 py-8">
         {/* Search and Filter Section */}
         <div className="flex flex-col sm:flex-row items-center gap-4 mb-8">

@@ -249,7 +249,7 @@ const OnboardingChat: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-[#000000] text-gray-900 dark:text-white transition-colors duration-200">
-      <div className="max-w-3xl mx-auto px-4 py-6">
+      <div className="w-full px-4 py-6">
         <div className="flex items-center justify-between mb-4">
           <h1 className="text-2xl font-bold text-gradient">Tell us about you</h1>
           <ThemeToggle />

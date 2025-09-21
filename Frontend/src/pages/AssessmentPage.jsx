@@ -1,106 +1,56 @@
 import React, { useState, useEffect } from 'react';
-import { useParams, Link } from 'react-router-dom';
-import Navbar from '../components/Navbar';
+import { useParams, Link, useNavigate } from 'react-router-dom';
+import assessmentService from '../services/assessmentService';
 
 const AssessmentPage = () => {
   const { id } = useParams();
+  const navigate = useNavigate();
   const [timeLeft, setTimeLeft] = useState(0);
   const [selectedOption, setSelectedOption] = useState(null);
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [assessmentData, setAssessmentData] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [answers, setAnswers] = useState([]);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
-  // Mock API data - in a real app, this would come from an API call
-  const mockApiData = {
-    'verbal-ability': {
-      title: 'Verbal Ability Assessment',
-      duration: 20, // minutes
-      questions: [
-        {
-          questionText: 'Which word is most similar in meaning to "ubiquitous"?',
-          options: [
-            'Rare',
-            'Common',
-            'Everywhere',
-            'Nowhere'
-          ]
-        },
-        {
-          questionText: 'Complete the analogy: Book is to Library as Car is to ___?',
-          options: [
-            'Highway',
-            'Garage',
-            'Driver',
-            'Engine'
-          ]
-        },
-        {
-          questionText: 'What is the opposite of "benevolent"?',
-          options: [
-            'Kind',
-            'Generous',
-            'Malevolent',
-            'Helpful'
-          ]
-        }
-      ]
-    },
-    'design-principles': {
-      title: 'Design Principles Assessment',
-      duration: 40,
-      questions: [
-        {
-          questionText: 'What is the primary purpose of white space in design?',
-          options: [
-            'To save ink',
-            'To create visual breathing room',
-            'To make text smaller',
-            'To reduce file size'
-          ]
-        },
-        {
-          questionText: 'Which principle states that related elements should be grouped together?',
-          options: [
-            'Contrast',
-            'Proximity',
-            'Alignment',
-            'Repetition'
-          ]
-        }
-      ]
-    },
-    'personality-quiz': {
-      title: 'Work Style Compass Quiz',
-      duration: 20,
-      questions: [
-        {
-          questionText: 'When working on a project, you prefer to:',
-          options: [
-            'Work independently and focus deeply',
-            'Collaborate with a team',
-            'Follow a structured plan',
-            'Adapt as you go'
-          ]
-        },
-        {
-          questionText: 'You are most energized by:',
-          options: [
-            'Solving complex problems',
-            'Helping others succeed',
-            'Meeting deadlines',
-            'Learning new things'
-          ]
-        }
-      ]
-    }
-  };
-
+  // Load assessment data from RAG system
   useEffect(() => {
-    // Find assessment data based on URL id
-    const data = mockApiData[id];
-    if (data) {
-      setAssessmentData(data);
-      setTimeLeft(data.duration * 60); // Convert minutes to seconds
-    }
+    const loadAssessment = async () => {
+      try {
+        setLoading(true);
+        setError(null);
+        
+        // If id is a predefined assessment type, create a new RAG-based assessment
+        if (id && ['verbal-ability', 'quantitative', 'logical', 'analytical', 'mixed'].includes(id)) {
+          const questionTypes = id === 'mixed' ? ['verbal', 'quantitative', 'logical', 'analytical'] : [id];
+          const assessment = await assessmentService.createRandomAptitudeTest(questionTypes, 5);
+          
+          setAssessmentData({
+            id: assessment.testId,
+            title: `${id.charAt(0).toUpperCase() + id.slice(1)} Assessment`,
+            duration: 20, // Default 20 minutes
+            questions: assessment.questions,
+            questionTypes: questionTypes
+          });
+          setTimeLeft(20 * 60); // 20 minutes in seconds
+        } else if (id) {
+          // Try to load existing assessment by ID
+          const assessment = await assessmentService.getAssessment(id);
+          setAssessmentData(assessment);
+          setTimeLeft(assessment.duration * 60);
+        } else {
+          setError('Invalid assessment ID');
+        }
+      } catch (err) {
+        console.error('Error loading assessment:', err);
+        setError('Failed to load assessment. Please try again.');
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    loadAssessment();
   }, [id]);
 
   useEffect(() => {
@@ -122,26 +72,60 @@ const AssessmentPage = () => {
     setSelectedOption(optionIndex);
   };
 
-  const handleNextQuestion = () => {
+  const handleNextQuestion = async () => {
     if (selectedOption !== null && assessmentData) {
-      if (currentQuestionIndex < assessmentData.questions.length - 1) {
-        setCurrentQuestionIndex(currentQuestionIndex + 1);
-        setSelectedOption(null);
-      } else {
-        // Assessment completed - in a real app, you'd submit results
-        alert('Assessment completed! Results would be submitted here.');
+      try {
+        setIsSubmitting(true);
+        
+        // Store the answer
+        const newAnswers = [...answers];
+        newAnswers[currentQuestionIndex] = selectedOption;
+        setAnswers(newAnswers);
+        
+        // Submit answer to backend
+        if (assessmentData.id) {
+          await assessmentService.submitAnswer(assessmentData.id, currentQuestionIndex, selectedOption);
+        }
+        
+        if (currentQuestionIndex < assessmentData.questions.length - 1) {
+          setCurrentQuestionIndex(currentQuestionIndex + 1);
+          setSelectedOption(null);
+        } else {
+          // Assessment completed
+          alert('Assessment completed! Your results have been saved.');
+          navigate('/assessments');
+        }
+      } catch (error) {
+        console.error('Error submitting answer:', error);
+        alert('Error submitting answer. Please try again.');
+      } finally {
+        setIsSubmitting(false);
       }
     }
   };
 
-  if (!assessmentData) {
+  if (loading) {
     return (
       <div className="min-h-screen bg-gray-50 dark:bg-[#000000] font-sans text-gray-900 dark:text-white transition-colors duration-200">
-        <Navbar />
-        <div className="px-8 py-8">
+        <div className="px-8">
           <div className="glass-card glow-sm p-6">
-            <h2 className="text-2xl font-bold mb-4 text-gradient">Assessment Not Found</h2>
-            <p className="text-gray-400 mb-4">The requested assessment could not be found.</p>
+            <div className="flex items-center justify-center">
+              <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-orange-500"></div>
+              <span className="ml-3 text-lg">Loading assessment...</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  if (error || !assessmentData) {
+    return (
+      <div className="min-h-screen bg-gray-50 dark:bg-[#000000] font-sans text-gray-900 dark:text-white transition-colors duration-200">
+        <div className="px-8">
+          <div className="glass-card glow-sm p-6">
+            <h2 className="text-2xl font-bold mb-4 text-gradient">Assessment Error</h2>
+            <p className="text-gray-400 mb-4">{error || 'The requested assessment could not be found.'}</p>
             <Link to="/assessments" className="btn-primary">
               Back to Assessments
             </Link>
@@ -156,9 +140,8 @@ const AssessmentPage = () => {
 
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-[#000000] font-sans text-gray-900 dark:text-white transition-colors duration-200">
-      <Navbar />
       <div className="px-8 py-8">
-        <div className="glass-card glow-sm p-6 max-w-4xl mx-auto">
+        <div className="glass-card glow-sm p-6 w-full">
           {/* Header */}
           <div className="flex justify-between items-center mb-8">
             <div>
@@ -225,17 +208,23 @@ const AssessmentPage = () => {
             
             <button
               onClick={handleNextQuestion}
-              disabled={selectedOption === null}
+              disabled={selectedOption === null || isSubmitting}
               className={`px-6 py-3 rounded-lg font-semibold transition-all duration-200 ${
-                selectedOption !== null
+                selectedOption !== null && !isSubmitting
                   ? 'bg-gradient-to-r from-orange-500 to-pink-500 text-white hover:shadow-lg'
                   : 'bg-gray-700 text-gray-400 cursor-not-allowed'
               }`}
             >
-              {currentQuestionIndex < assessmentData.questions.length - 1 
-                ? 'Next Question' 
-                : 'Complete Assessment'
-              }
+              {isSubmitting ? (
+                <div className="flex items-center">
+                  <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
+                  Submitting...
+                </div>
+              ) : (
+                currentQuestionIndex < assessmentData.questions.length - 1 
+                  ? 'Next Question' 
+                  : 'Complete Assessment'
+              )}
             </button>
           </div>
         </div>

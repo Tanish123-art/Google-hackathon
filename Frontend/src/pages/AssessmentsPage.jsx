@@ -1,8 +1,100 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import Navbar from "../components/Navbar";
+import assessmentService from '../services/assessmentService';
 
 const AssessmentJourney = () => {
+  const [loading, setLoading] = useState(true);
+  const [contentAnalysis, setContentAnalysis] = useState(null);
+  const [questionTypes, setQuestionTypes] = useState([]);
+
+  // Load content analysis and question types
+  useEffect(() => {
+    const loadData = async () => {
+      try {
+        setLoading(true);
+        const analysis = await assessmentService.getContentAnalysis();
+        setContentAnalysis(analysis);
+        setQuestionTypes(assessmentService.getQuestionTypes());
+      } catch (error) {
+        console.error('Error loading assessment data:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    loadData();
+  }, []);
+
+  // Dynamic assessment cards based on RAG content analysis
+  const getAssessmentCards = () => {
+    if (!contentAnalysis || !questionTypes.length) {
+      return [
+        {
+          title: "Verbal Ability",
+          subtitle: "Language and Communication Skills",
+          rating: 5,
+          time: "20 min",
+          points: "130 XP",
+          action: "Start Assessment",
+          pathId: "verbal-ability",
+          description: "Test your vocabulary, comprehension, and verbal reasoning skills"
+        },
+        {
+          title: "Quantitative Reasoning",
+          subtitle: "Mathematical and Numerical Skills",
+          rating: 5,
+          time: "20 min",
+          points: "130 XP",
+          action: "Start Assessment",
+          pathId: "quantitative",
+          description: "Assess your mathematical problem-solving abilities"
+        },
+        {
+          title: "Logical Reasoning",
+          subtitle: "Problem-solving and Pattern Recognition",
+          rating: 5,
+          time: "20 min",
+          points: "130 XP",
+          action: "Start Assessment",
+          pathId: "logical",
+          description: "Evaluate your logical thinking and pattern recognition"
+        },
+        {
+          title: "Analytical Thinking",
+          subtitle: "Critical Thinking and Analysis",
+          rating: 5,
+          time: "20 min",
+          points: "130 XP",
+          action: "Start Assessment",
+          pathId: "analytical",
+          description: "Test your analytical and critical thinking skills"
+        },
+        {
+          title: "Mixed Assessment",
+          subtitle: "Comprehensive Aptitude Test",
+          rating: 5,
+          time: "25 min",
+          points: "200 XP",
+          action: "Start Assessment",
+          pathId: "mixed",
+          description: "Complete assessment covering all aptitude areas"
+        }
+      ];
+    }
+
+    return questionTypes.map(type => ({
+      title: type.label,
+      subtitle: type.description,
+      rating: 5,
+      time: "20 min",
+      points: "130 XP",
+      action: "Start Assessment",
+      pathId: type.value,
+      description: type.description
+    }));
+  };
+
+  const cards = getAssessmentCards();
+
   // Example stage data
   const stages = [
     { id: 1, label: "Stage 1: Foundational Aptitude", status: "completed" },
@@ -11,73 +103,40 @@ const AssessmentJourney = () => {
     { id: 4, label: "Stage 4: Mastery", status: "locked" },
   ];
 
-  // Example card data
-  const cards = [
-    {
-      title: "Aptitude Tests",
-      subtitle: "Quantitative Reasoning",
-      rating: 5,
-      time: "20 min",
-      points: "130 XP",
-      action: "View",
-      pathId: null,
-    },
-    {
-      title: "Skill-Based Challenges",
-      subtitle: "Verbal Ability",
-      rating: 5,
-      time: "20 min",
-      points: "130 XP",
-      action: "Start Assessment",
-      pathId: "verbal-ability",
-    },
-    {
-      title: "Personality Quizzes",
-      subtitle: "Work Style Compass",
-      rating: 5,
-      time: "20 min",
-      points: "150 XP",
-      action: "Start Quiz",
-      pathId: "personality-quiz",
-    },
-    {
-      title: "Coding Logic",
-      subtitle: "Score: 92% (Completed)",
-      rating: 5,
-      time: "25 min",
-      points: "200 XP",
-      action: "Completed",
-      disabled: true,
-      pathId: null,
-    },
-    {
-      title: "Design Principles",
-      subtitle: "Creative Design Tasks",
-      rating: 5,
-      time: "40 min",
-      points: "230 XP",
-      action: "Start Assessment",
-      pathId: "design-principles",
-    },
-    {
-      title: "Recommended Next Steps",
-      subtitle: "Project Management Simulation",
-      rating: 4,
-      time: "30 min",
-      points: "520 XP",
-      action: "Explore",
-      pathId: null,
-    },
-  ];
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-gray-50 dark:bg-[#000000] font-sans text-gray-900 dark:text-white transition-colors duration-200">
+        <div className="px-8">
+          <div className="glass-card glow-sm p-6">
+            <div className="flex items-center justify-center">
+              <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-orange-500"></div>
+              <span className="ml-3 text-lg">Loading assessments...</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-[#000000] font-sans text-gray-900 dark:text-white transition-colors duration-200">
-      <Navbar />
-      <div className="px-8 py-8">
+      <div className="px-8">
         <div className="glass-card glow-sm p-6 mb-8">
           <h2 className="text-2xl font-bold mb-6 text-gradient">
             Assessment Journey
           </h2>
+          
+          {contentAnalysis && (
+            <div className="mb-6 p-4 bg-orange-50 dark:bg-orange-900/20 rounded-lg border border-orange-200 dark:border-orange-800">
+              <h3 className="text-lg font-semibold text-orange-800 dark:text-orange-200 mb-2">
+                📚 RAG-Powered Assessments
+              </h3>
+              <p className="text-orange-700 dark:text-orange-300 text-sm">
+                Questions are dynamically generated using our AI-powered RAG system, 
+                ensuring content is always relevant and up-to-date based on the latest reference materials.
+              </p>
+            </div>
+          )}
 
           {/* 🔹 Modern Timeline Progression */}
           <div className="flex items-center justify-between mb-12 relative">

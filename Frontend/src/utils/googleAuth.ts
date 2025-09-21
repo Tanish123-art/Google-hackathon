@@ -42,19 +42,9 @@ export async function initGoogleSignIn(callback: (credential: string) => void) {
   await loadGoogleScript();
   const clientId = (import.meta as any).env?.VITE_GOOGLE_CLIENT_ID as string;
   
-  if (!clientId) {
-    console.warn('VITE_GOOGLE_CLIENT_ID not found. Using demo client ID for development.');
-    // Use a demo client ID for development (this won't work for actual authentication)
-    const demoClientId = 'demo-client-id.apps.googleusercontent.com';
-    (window as any).google.accounts.id.initialize({
-      client_id: demoClientId,
-      callback: (response: any) => {
-        console.log('Demo Google authentication attempted:', response);
-        alert('Google authentication is in demo mode. Please set up VITE_GOOGLE_CLIENT_ID for production use.');
-      },
-      auto_select: false,
-      ux_mode: 'popup'
-    });
+  if (!clientId || clientId === 'demo-client-id.apps.googleusercontent.com') {
+    console.warn('VITE_GOOGLE_CLIENT_ID not found or using demo ID. Google authentication disabled.');
+    // Don't initialize Google auth with invalid client ID
     return;
   }
   
@@ -67,6 +57,29 @@ export async function initGoogleSignIn(callback: (credential: string) => void) {
 }
 
 export function renderGoogleButton(container: HTMLElement) {
+  const clientId = (import.meta as any).env?.VITE_GOOGLE_CLIENT_ID as string;
+  
+  if (!clientId || clientId === 'demo-client-id.apps.googleusercontent.com') {
+    // Show a disabled button with setup instructions
+    container.innerHTML = `
+      <div style="
+        border: 2px dashed #ccc; 
+        padding: 12px; 
+        text-align: center; 
+        border-radius: 8px; 
+        color: #666; 
+        font-size: 14px;
+        background: #f9f9f9;
+      ">
+        <div style="margin-bottom: 8px;">🔧 Google Auth Setup Required</div>
+        <div style="font-size: 12px;">
+          Configure VITE_GOOGLE_CLIENT_ID in .env.local
+        </div>
+      </div>
+    `;
+    return;
+  }
+
   (window as any).google.accounts.id.renderButton(container, {
     theme: 'outline',
     size: 'large',

@@ -31,6 +31,10 @@ const AuthForm: React.FC<AuthFormProps> = ({
   });
   const [showPassword, setShowPassword] = useState(false);
   const [formError, setFormError] = useState<string | null>(null);
+
+  // Debug logging
+  console.log('AuthForm received error:', error);
+  console.log('AuthForm formError:', formError);
   const [remember, setRemember] = useState(true);
 
   const getPasswordStrength = (pwd: string) => {
@@ -118,8 +122,15 @@ const AuthForm: React.FC<AuthFormProps> = ({
         )}
 
         {(error || formError) && (
-          <div className="auth-error">
-            <p>{formError ?? error}</p>
+          <div className="auth-error" style={{ 
+            backgroundColor: '#f8d7da', 
+            color: '#721c24', 
+            padding: '10px', 
+            borderRadius: '4px', 
+            marginBottom: '15px',
+            border: '1px solid #f5c6cb'
+          }}>
+            <p style={{ margin: 0, fontWeight: 'bold' }}>{formError ?? error}</p>
           </div>
         )}
         

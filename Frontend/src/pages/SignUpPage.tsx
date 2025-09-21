@@ -17,11 +17,15 @@ const SignUpPage: React.FC = () => {
 
     try {
       if ('fullName' in data && 'agreeToTerms' in data && data.fullName && data.email && data.password && data.agreeToTerms) {
-        const res = await axios.post(`${import.meta.env.VITE_BACKEND_URL}/api/auth/signup`, {
+        const signupData = {
           username: data.fullName,
           email: data.email,
           password: data.password,
-        });
+        };
+        console.log('Sending signup request:', signupData);
+        console.log('Backend URL:', import.meta.env.VITE_BACKEND_URL);
+        
+        const res = await axios.post(`${import.meta.env.VITE_BACKEND_URL}/api/auth/signup`, signupData);
         localStorage.setItem('token', res.data.token);
         if (typeof window !== 'undefined') {
           window.location.replace('/onboarding');
@@ -31,8 +35,21 @@ const SignUpPage: React.FC = () => {
       } else {
         setError('Please fill in all required fields and agree to terms');
       }
-    } catch (err) {
-      setError('An error occurred during sign up');
+    } catch (err: any) {
+      console.error('Signup error:', err);
+      console.error('Error response:', err.response?.data);
+      
+      if (err.response?.data?.msg) {
+        setError(err.response.data.msg);
+      } else if (err.response?.status === 400) {
+        setError('Invalid signup data. Please check your information.');
+      } else if (err.response?.status === 500) {
+        setError('Server error. Please try again later.');
+      } else if (err.code === 'ERR_NETWORK') {
+        setError('Network error. Please check your connection.');
+      } else {
+        setError('An error occurred during sign up. Please try again.');
+      }
     } finally {
       setIsLoading(false);
     }
@@ -42,23 +59,51 @@ const SignUpPage: React.FC = () => {
     navigate('/signin');
   };
 
-  const handleGoogleCredential = (credential: string) => {
-    const payload = parseJwt(credential);
-    if (!payload) return;
-    const userData = {
-      id: payload.sub,
-      fullName: payload.name ?? 'Google User',
-      email: payload.email,
-      avatar: payload.picture,
-      location: '—',
-      createdAt: new Date()
-    };
-    localStorage.setItem('user', JSON.stringify(userData));
-    localStorage.setItem('isAuthenticated', 'true');
-    if (typeof window !== 'undefined') {
-      window.location.replace('/onboarding');
-    } else {
-      navigate('/onboarding', { replace: true });
+  const handleGoogleCredential = async (credential: string) => {
+    try {
+      setIsLoading(true);
+      setError(null);
+
+      console.log('Google credential received:', credential);
+
+      // Send credential to backend for verification
+      const response = await axios.post(`${import.meta.env.VITE_BACKEND_URL}/api/auth/google`, {
+        credential: credential
+      });
+
+      console.log('Google auth response:', response.data);
+
+      // Store authentication data
+      localStorage.setItem('token', response.data.token);
+      localStorage.setItem('isAuthenticated', 'true');
+      localStorage.setItem('user', JSON.stringify(response.data.user));
+
+      // Dispatch custom event to notify navbar of auth state change
+      window.dispatchEvent(new CustomEvent('authStateChanged'));
+
+      // Redirect to dashboard
+      if (typeof window !== 'undefined') {
+        window.location.replace('/dashboard');
+      } else {
+        navigate('/dashboard', { replace: true });
+      }
+    } catch (err: any) {
+      console.error('Google auth error:', err);
+      console.error('Error response:', err.response?.data);
+      
+      if (err.response?.data?.msg) {
+        setError(err.response.data.msg);
+      } else if (err.response?.status === 400) {
+        setError('Invalid Google authentication. Please try again.');
+      } else if (err.response?.status === 500) {
+        setError('Server error during Google authentication. Please try again.');
+      } else if (err.code === 'ERR_NETWORK') {
+        setError('Network error. Please check your connection.');
+      } else {
+        setError('An error occurred during Google authentication. Please try again.');
+      }
+    } finally {
+      setIsLoading(false);
     }
   };
 

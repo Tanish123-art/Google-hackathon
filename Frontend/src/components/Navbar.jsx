@@ -10,13 +10,41 @@ const Navbar = () => {
 
   useEffect(() => {
     // Check authentication status on component mount
-    const authStatus = localStorage.getItem('isAuthenticated');
-    const userData = localStorage.getItem('user');
+    const checkAuthStatus = () => {
+      const authStatus = localStorage.getItem('isAuthenticated');
+      const userData = localStorage.getItem('user');
+      
+      if (authStatus === 'true' && userData) {
+        setIsAuthenticated(true);
+        setUser(JSON.parse(userData));
+      } else {
+        setIsAuthenticated(false);
+        setUser(null);
+      }
+    };
+
+    checkAuthStatus();
+
+    // Listen for storage changes (when user signs in/out in another tab)
+    const handleStorageChange = (e) => {
+      if (e.key === 'isAuthenticated' || e.key === 'user') {
+        checkAuthStatus();
+      }
+    };
+
+    window.addEventListener('storage', handleStorageChange);
     
-    if (authStatus === 'true' && userData) {
-      setIsAuthenticated(true);
-      setUser(JSON.parse(userData));
-    }
+    // Also listen for custom auth events
+    const handleAuthChange = () => {
+      checkAuthStatus();
+    };
+
+    window.addEventListener('authStateChanged', handleAuthChange);
+
+    return () => {
+      window.removeEventListener('storage', handleStorageChange);
+      window.removeEventListener('authStateChanged', handleAuthChange);
+    };
   }, []);
 
   const handleBellClick = () => {
@@ -27,8 +55,13 @@ const Navbar = () => {
   const handleLogout = () => {
     localStorage.removeItem('isAuthenticated');
     localStorage.removeItem('user');
+    localStorage.removeItem('token');
     setIsAuthenticated(false);
     setUser(null);
+    
+    // Dispatch custom event to notify other components of auth state change
+    window.dispatchEvent(new CustomEvent('authStateChanged'));
+    
     if (typeof window !== 'undefined') {
       window.location.replace('/signin');
     } else {
@@ -48,13 +81,12 @@ const Navbar = () => {
       <div className="flex items-center space-x-6">
         {isAuthenticated ? (
           <>
-            <Link to="/" className="hover:text-orange-500 transition-colors duration-200">Dashboard</Link>
+            <Link to="/dashboard" className="hover:text-orange-500 transition-colors duration-200">Dashboard</Link>
             <Link to="/career-exploration" className="hover:text-orange-500 transition-colors duration-200">Career Exploration</Link>
             <Link to="/skill-development" className="hover:text-orange-500 transition-colors duration-200">Skill Development</Link>
             <Link to="/mentorship" className="hover:text-orange-500 transition-colors duration-200">Mentorship</Link>
             <Link to="/job-marketplace" className="hover:text-orange-500 transition-colors duration-200">Job Marketplace</Link>
             <Link to="/assessments" className="hover:text-orange-500 transition-colors duration-200">Assessments</Link>
-            <Link to="/resources" className="hover:text-orange-500 transition-colors duration-200">Resources</Link>
             <button onClick={handleBellClick} className="icon-btn bg-transparent p-0 group" title="Notifications">
               <Bell size={20} className="text-gray-600 dark:text-gray-400 icon icon-hover" />
             </button>
